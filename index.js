@@ -114,3 +114,91 @@ function gameObject() {
         },
     };
 }
+
+
+function teams () {
+    return Object.values(gameObject());
+}
+
+function allPlayers() {
+    const entries = [];
+    for (const team of teams()) {
+        entries.push(...Object.entries(team.players));
+    }
+    return entries;
+}
+
+function findPlayer(playerName) {
+    const match = allPlayers().find(([name, stats]) => name === playerName);
+    return match ? match[1] : undefined;
+}
+
+function findTeam(teamName) {
+    return teams().find(team => team.teamName === teamName);
+}
+
+//player informations
+function numPointsScored(playerName) {
+    const player = findPlayer(playerName);
+    return player ? player.points : undefined;
+}
+
+function shoeSize(playerName) {
+    const player = findPlayer(playerName);
+    return player ? player.shoe : undefined;
+}
+
+//team informations
+function teamColors(teamName) {
+    const team = findTeam(teamName);
+    return team ? team.colors : undefined;
+}
+
+function teamNames() {
+    return teams().map(team => team.teamName);
+}
+
+//players numbers and players stats
+function playerNumbers(teamName) {
+    const team = findTeam(teamName);
+    return team ? Object.values(team.players).map(player => player.number) : undefined;
+}
+
+function playerStats(playerName) {
+    return findPlayer(playerName);
+}
+
+//bonus questions: shoe size, most point scored, winning team, player with longest name
+function bigShoeRebounds() {
+    const [, biggest] = allPlayers().reduce((best, current)=>
+        current[1].shoe > best[1].shoe ? current : best
+    );
+    return biggest.rebounds;
+}
+
+function mostPointsScored() {
+    const [name] = allPlayers().reduce((best, current) =>
+        current[1].points > best[1].points ? current : best
+    );
+    return name;
+}
+
+function winningTeam() {
+    let winner = null;
+    let highest = -infinity;
+    for (const team of teams()) {
+        const total = Object.values(team.players).reduce((sum, player) => sum + player.points, 0);
+    }
+    if (total > highest) {
+        highest = total;
+        winner = team.teamName;
+    }
+    return winner;
+}
+
+function playerWithLongestName() {
+    const [name] = allPlayers().reduce((longest, current) =>
+        current[0].length > longest[0].length ? current : longest
+    );
+    return name;
+}
